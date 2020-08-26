@@ -6,5 +6,8 @@ public class Duke {
                 + "| |_| | |_| |   <  __/\n"
                 + "|____/ \\__,_|_|\\_\\___|\n";
         System.out.println("Hello from\n" + logo);
+        String border = "____________________________________________________________\n";
+        System.out.print(border + " Hello! I'm Duke\n" + " What can I do for you?\n" + border);
+        System.out.print(" Bye. Hope to see you again soon!\n" + border);
     }
 }
