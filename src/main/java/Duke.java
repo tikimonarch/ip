@@ -14,6 +14,8 @@ public class Duke {
         String command;
         int size = 0;
         String temp;
+        String tag = "[ ]";
+        String[] temp2 = new String[2];
         String[] list = new String[100];
         while (true) {
             BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
@@ -23,8 +25,7 @@ public class Duke {
             } else if (command.equals("list")) {
                 if (size == 0) {
                     System.out.print(border + "Empty\n" + border);
-                }
-                else {
+                } else {
                     System.out.print(border + "Here are the tasks in your list:\n");
                     for (int i = 0; i < size; i++) {
                         System.out.println(" " + Integer.toString(i + 1) + "." + list[i]);
@@ -32,7 +33,7 @@ public class Duke {
                     System.out.print(border);
                 }
                 continue;
-            } else if (command.contains("done")){
+            } else if (command.contains("done")) {
                 String[] arrOfStr = command.split(" ", 2);
                 temp = list[Integer.valueOf(arrOfStr[1])-1].replace('✗','✓');
                 list[Integer.valueOf(arrOfStr[1])-1] = temp;
@@ -40,10 +41,28 @@ public class Duke {
                 System.out.println("  " + list[Integer.valueOf(arrOfStr[1])-1]);
                 System.out.print(border);
                 continue;
+            } else {
+                if (command.contains("todo")) {
+                    tag = "[T]";
+                    command = command.replaceAll("todo ", "");
+                    list[size] = tag + "[✗] " + command;
+                } else if (command.contains("deadline")) {
+                    tag = "[D]";
+                    command = command.replaceAll("deadline ", "");
+                    temp2 = command.split(" /by", 2);
+                    list[size] = tag + "[✗] " + temp2[0] + " (by:" + temp2[1] + ")";
+                } else if (command.contains("event ")) {
+                    tag = "[E]";
+                    command = command.replaceAll("event", "");
+                    temp2 = command.split(" /at", 2);
+                    list[size] = tag + "[✗] " + temp2[0] + " (at:" + temp2[1] + ")";
+                } else {
+                    list[size] = tag + "[✗] " + command;
+                }
+                System.out.println(border + " Got it. I've added this task:\n  " + list[size]);
+                size++;
+                System.out.println(" Now you have " + Integer.toString(size) + " tasks in the list.\n" + border);
             }
-            list[size] = "[✗] " + command;
-            size++;
-            System.out.print(border + " added: " + command + "\n" + border);
         }
         System.out.print(border + " Bye. Hope to see you again soon!\n" + border);
     }
