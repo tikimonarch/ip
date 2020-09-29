@@ -1,21 +1,45 @@
 //Entirely refurbishing Duke to OOP based in the nxt version :)
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+
 public class Duke {
-    public static void main(String[] args) throws EmptyTodoException, IncorrectInputException {
+    public static String border = "____________________________________________________________\n";
+    public  static int size = 0;
+    public static ArrayList<String> list = new ArrayList<String>();
+
+    public static void printList() {
+        System.out.print(border + "Here are the tasks in your list:\n");
+        for (int i = 0; i < size; i++) {
+            System.out.println(" " + Integer.toString(i + 1) + "." + list.get(i));
+        }
+        System.out.print(border);
+    }
+
+    public static void delete(int index) {
+        System.out.println(border + "Noted. I've removed this task:");
+        System.out.println("  " + list.get(index));
+        list.remove(index);
+        size--;
+        System.out.println("Now you have " + size + " tasks in the list.");
+        System.out.print(border);
+    }
+
+    public static void main(String[] args) throws EmptyTodoException, IncorrectInputException, Exception {
         String logo = " ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
                 + "| | | | | | | |/ / _ \\\n"
                 + "| |_| | |_| |   <  __/\n"
                 + "|____/ \\__,_|_|\\_\\___|\n";
         System.out.println("Hello from\n" + logo);
-        String border = "____________________________________________________________\n";
+
         System.out.print(border + " Hello! I'm Duke\n" + " What can I do for you?\n" + border);
         String command;
-        int size = 0;
         String temp;
+        String[] processInput = new String[2];
         String tag = "[ ]";
-        String[] temp2 = new String[2];
-        String[] list = new String[100];
         while (true) {
             try {
                 Scanner read = new Scanner(System.in);
@@ -26,21 +50,20 @@ public class Duke {
                     if (size == 0) {
                         System.out.print(border + "Empty\n" + border);
                     } else {
-                        System.out.print(border + "Here are the tasks in your list:\n");
-                        for (int i = 0; i < size; i++) {
-                            System.out.println(" " + Integer.toString(i + 1) + "." + list[i]);
-                        }
-                        System.out.print(border);
+                        printList();
                     }
                     continue;
                 } else if (command.contains("done")) {
-                    String[] arrOfStr = command.split(" ", 2);
-                    temp = list[Integer.valueOf(arrOfStr[1]) - 1].replace('✗', '✓');
-                    list[Integer.valueOf(arrOfStr[1]) - 1] = temp;
+                    processInput = command.split(" ", 2);
+                    temp = list.get(Integer.valueOf(processInput[1]) - 1).replace('✗', '✓');
+                    list.set(Integer.valueOf(processInput[1]) - 1, temp);
                     System.out.print(border + " Nice! I've marked this task as done:\n");
-                    System.out.println("  " + list[Integer.valueOf(arrOfStr[1]) - 1]);
+                    System.out.println("  " + list.get(Integer.valueOf(processInput[1]) - 1));
                     System.out.print(border);
                     continue;
+                } else if (command.contains("delete")) {
+                    processInput = command.split(" ", 2);
+                    delete(Integer.valueOf(processInput[1]) - 1);
                 } else {
                     if (command.contains("todo")) {
                         if (command.equals("todo")){
@@ -48,21 +71,21 @@ public class Duke {
                         }
                         tag = "[T]";
                         command = command.replaceAll("todo ", "");
-                        list[size] = tag + "[✗] " + command;
+                        list.add(tag + "[✗] " + command);
                     } else if (command.contains("deadline")) {
                         tag = "[D]";
                         command = command.replaceAll("deadline ", "");
-                        temp2 = command.split(" /by", 2);
-                        list[size] = tag + "[✗] " + temp2[0] + " (by:" + temp2[1] + ")";
+                        processInput = command.split(" /by", 2);
+                        list.add(tag + "[✗] " + processInput[0] + " (by:" + processInput[1] + ")");
                     } else if (command.contains("event ")) {
                         tag = "[E]";
                         command = command.replaceAll("event ", "");
-                        temp2 = command.split(" /at", 2);
-                        list[size] = tag + "[✗] " + temp2[0] + " (at:" + temp2[1] + ")";
+                        processInput = command.split(" /at", 2);
+                        list.add(tag + "[✗] " + processInput[0] + " (at:" + processInput[1] + ")");
                     } else {
                         throw new IncorrectInputException();
                     }
-                    System.out.println(border + " Got it. I've added this task:\n  " + list[size]);
+                    System.out.println(border + " Got it. I've added this task:\n  " + list.get(size));
                     size++;
                     System.out.println(" Now you have " + Integer.toString(size) + " tasks in the list.\n" + border);
                 }
