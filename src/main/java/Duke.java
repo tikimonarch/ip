@@ -40,6 +40,14 @@ public class Duke {
         String temp;
         String[] processInput = new String[2];
         String tag = "[ ]";
+        File data = new File("List.txt");
+        if (data.exists()) {
+            Scanner load = new Scanner(data);
+            while (load.hasNextLine()) {
+                list.add(load.nextLine());
+                size++;
+            }
+        }
         while (true) {
             try {
                 Scanner read = new Scanner(System.in);
@@ -99,6 +107,11 @@ public class Duke {
                 System.out.print(border);
             }
         }
+        FileWriter saveFile = new FileWriter("List.txt");
+        for (String item : list){
+            saveFile.write(item+ "\n");
+        }
+        saveFile.close();
         System.out.print(border + " Bye. Hope to see you again soon!\n" + border);
     }
 }
