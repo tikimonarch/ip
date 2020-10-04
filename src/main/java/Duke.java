@@ -8,7 +8,26 @@ import java.io.FileWriter;
 public class Duke {
     public static String border = "____________________________________________________________\n";
     public  static int size = 0;
+    public  static int searchSize = 0;
     public static ArrayList<String> list = new ArrayList<String>();
+    public static ArrayList<String> searchResult = new ArrayList<String>();
+
+    public static void findList(String input) {
+        String inspectItem;
+        for (int i = 0; i < size; i++){
+            inspectItem = list.get(i);
+            if (inspectItem.contains(input)){
+                searchResult.add(inspectItem);
+                searchSize++;
+            }
+        }
+        System.out.print(border + "Here are the matching tasks in your list:\n");
+        for (int j = 0; j < searchSize; j++) {
+            System.out.println(" " + Integer.toString(j + 1) + "." + searchResult.get(j));
+        }
+        System.out.print(border);
+        searchSize = 0;
+    }
 
     public static void printList() {
         System.out.print(border + "Here are the tasks in your list:\n");
@@ -63,7 +82,7 @@ public class Duke {
                     continue;
                 } else if (command.contains("done")) {
                     processInput = command.split(" ", 2);
-                    temp = list.get(Integer.valueOf(processInput[1]) - 1).replace('✗', '✓');
+                    temp = list.get(Integer.valueOf(processInput[1]) - 1).replace("[\u2718]", "[\u2713]");
                     list.set(Integer.valueOf(processInput[1]) - 1, temp);
                     System.out.print(border + " Nice! I've marked this task as done:\n");
                     System.out.println("  " + list.get(Integer.valueOf(processInput[1]) - 1));
@@ -72,24 +91,27 @@ public class Duke {
                 } else if (command.contains("delete")) {
                     processInput = command.split(" ", 2);
                     delete(Integer.valueOf(processInput[1]) - 1);
-                } else {
+                } else if (command.contains("find")) {
+                    processInput = command.split(" ", 2);
+                    findList(processInput[1]);
+                }else {
                     if (command.contains("todo")) {
                         if (command.equals("todo")){
                             throw new EmptyTodoException();
                         }
                         tag = "[T]";
                         command = command.replaceAll("todo ", "");
-                        list.add(tag + "[✗] " + command);
+                        list.add(tag + "[\u2718] " + command);
                     } else if (command.contains("deadline")) {
                         tag = "[D]";
                         command = command.replaceAll("deadline ", "");
                         processInput = command.split(" /by", 2);
-                        list.add(tag + "[✗] " + processInput[0] + " (by:" + processInput[1] + ")");
+                        list.add(tag + "[\u2718] " + processInput[0] + " (by:" + processInput[1] + ")");
                     } else if (command.contains("event ")) {
                         tag = "[E]";
                         command = command.replaceAll("event ", "");
                         processInput = command.split(" /at", 2);
-                        list.add(tag + "[✗] " + processInput[0] + " (at:" + processInput[1] + ")");
+                        list.add(tag + "[\u2718] " + processInput[0] + " (at:" + processInput[1] + ")");
                     } else {
                         throw new IncorrectInputException();
                     }
