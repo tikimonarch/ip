@@ -14,7 +14,7 @@ public class Task {
     }
 
     public String statusIsDone(){
-        return (this.isDone?"\u2713":"\u2717");
+        return (this.isDone?"/":"X");
     }
 
     public void setIsDone() {
