@@ -33,19 +33,19 @@ public class Parser {
 
         if (userInput.split(command).length < 2
                 || userInput.split(command)[1].equals(" ")) {
-            throw new DukeException("☹ OOPS!!! Missing duke.task description!");
+            throw new DukeException(":( OOPS!!! Missing task description!");
         } else {
             switch (command) {
             case "todo":
                 return userInput.substring(userInput.indexOf(' ') + 1);
             case "deadline":
                 if (!userInput.contains("/by ") || userInput.contains("deadline /by")) {
-                    throw new DukeException("☹ OOPS!!! Missing or incorrect /by statement");
+                    throw new DukeException(":( OOPS!!! Missing or incorrect /by statement");
                 }
                 return userInput.substring(userInput.indexOf(' ') + 1, userInput.indexOf("/by ") - 1);
             case "event":
                 if (!userInput.contains("/at ") || userInput.contains("deadline /at")) {
-                    throw new DukeException("☹ OOPS!!! Missing or incorrect /at statement");
+                    throw new DukeException(":( OOPS!!! Missing or incorrect /at statement");
                 }
                 return userInput.substring(userInput.indexOf(' ') + 1, userInput.indexOf("/at ") - 1);
             default:
@@ -68,21 +68,21 @@ public class Parser {
             try {
                 return LocalDate.parse(taskDateString);
             } catch (Exception e) {
-                throw new DukeException("Date specified is of wrong format! Use YYYY-MM-DD format!");
+                throw new DukeException("Date specified should be of YYYY-MM-DD format!");
             }
         case "event":
             taskDateString = userInput.split("/at ")[1];
             try {
                 return LocalDate.parse(taskDateString);
             } catch (Exception e) {
-                throw new DukeException("Date specified is of wrong format! Use YYYY-MM-DD format!");
+                throw new DukeException("Date specified should be of YYYY-MM-DD format!");
             }
         case "occur":
             taskDateString = userInput.split(" ")[1];
             try {
                 return LocalDate.parse(taskDateString);
             } catch (Exception e) {
-                throw new DukeException("Date specified is of wrong format! Use YYYY-MM-DD format!");
+                throw new DukeException("Date specified should be of YYYY-MM-DD format!");
             }
         default:
             return null;
@@ -100,12 +100,12 @@ public class Parser {
         String command = getCommand(userInput);
 
         if (userInput.split(command).length < 2 || userInput.split(command)[1].equals(" ")) {
-            throw new DukeException("☹ OOPS!!! Missing index of duke.task!");
+            throw new DukeException(":( OOPS!!! Missing index of task!");
         }
         try {
             return Integer.parseInt(userInput.split(" ")[1]) - 1;
         } catch (NumberFormatException e) {
-            throw new DukeException("☹ OOPS!!! No integer index detected!");
+            throw new DukeException(":( OOPS!!! No integer index detected!");
         }
     }
 
@@ -120,7 +120,7 @@ public class Parser {
 
         if (userInput.split(command).length < 2
                 || userInput.split(command)[1].equals(" ")) {
-            throw new DukeException("☹ OOPS!!! Missing target!");
+            throw new DukeException(":( OOPS!!! Missing target!");
         } else {
             return userInput.substring(userInput.indexOf(' ') + 1);
         }
@@ -171,7 +171,7 @@ public class Parser {
             tasks.findTasks(getParam(userInput));
             return;
         default:
-            throw new DukeException("☹ OOPS!!! I'm sorry, but I don't know what that means!");
+            throw new DukeException(":( OOPS!!! I'm sorry, but I don't know what that means!");
         }
     }
 }
