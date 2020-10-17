@@ -47,7 +47,7 @@ public class Storage {
                     default:
                         throw new DukeException("There is something wrong with the format!");
                     }
-                    if (isDoneStatus.equals("\u2713")) {
+                    if (isDoneStatus.equals("/")) {
                         list.get(list.size() - 1).setIsDone();
                     }
                 }
