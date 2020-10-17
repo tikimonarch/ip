@@ -9,15 +9,37 @@ public class TaskList {
         this.list = new ArrayList<Task>();
     }
 
-    public TaskList(ArrayList list){
+    public TaskList(ArrayList<Task> list){
         this.list = list;
     }
 
+    public Task getTask(int index) {
+        return this.list.get(index);
+    }
+
+    public ArrayList<Task> getTaskList() {
+        return this.list;
+    }
+
     public void deleteTask(int index) {
-        System.out.println("Noted. I've removed this task:");
-        System.out.println("  " + this.list.get(index));
         this.list.remove(index);
-        System.out.println("Now you have " + this.list.size() + " tasks in the list.");
+    }
+
+    public  ArrayList findTasks(String keyword) {
+        int searchSize = 0;
+        ArrayList<String> searchResult = new ArrayList<String>();
+        String inspectItem;
+        for (int i = 0; i < this.list.size(); i++){
+            inspectItem = this.list.get(i).getDescription();
+            if (inspectItem.contains(keyword)){
+                searchResult.add(inspectItem);
+                searchSize++;
+            }
+        }
+        for (int j = 0; j < searchSize; j++) {
+            System.out.println(" " + Integer.toString(j + 1) + "." + searchResult.get(j));
+        }
+        return searchResult;
     }
 
     public void addTask(Task task){
@@ -28,7 +50,7 @@ public class TaskList {
         this.list.get(index).setIsDone();
     }
 
-    public void printList(ArrayList tasks) {
+    public void printList() {
         if (this.list.size() == 0) {
             System.out.println("There are currently no tasks.");
         } else {

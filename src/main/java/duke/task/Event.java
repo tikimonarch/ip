@@ -1,14 +1,16 @@
 package duke.task;
 
-public class Event extends Task {
-    private String at;
+import java.time.LocalDate;
 
-    public Event(String description, String at) {
+public class Event extends Task {
+    private LocalDate at;
+
+    public Event(String description, LocalDate at) {
         super(description);
         this.at = at;
     }
 
-    public String getAt() {
+    public LocalDate getAt() {
         return this.at;
     }
 

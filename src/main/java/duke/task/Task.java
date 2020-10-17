@@ -13,8 +13,8 @@ public class Task {
         return this.description;
     }
 
-    public char statusIsDone(){
-        return (this.isDone?'✓':'✗');
+    public String statusIsDone(){
+        return (this.isDone?"\u2713":"\u2717");
     }
 
     public void setIsDone() {
@@ -23,6 +23,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return this.statusIsDone() + " " + this.getDescription();
+        return "[" + this.statusIsDone() + "] "+ this.getDescription();
     }
 }

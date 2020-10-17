@@ -1,91 +1,52 @@
 //Entirely refurbishing Duke to OOP based in the nxt version :)
 package duke;
 
-import duke.task.*;
+import duke.DukeException;
 
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.io.File;
+import duke.parser.Parser;
+import duke.storage.Storage;
+import duke.task.TaskList;
+import duke.ui.Ui;
+
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.IOException;
 
 public class Duke {
-    public static String border = "____________________________________________________________\n";
+    private Storage storage;
+    private TaskList tasks;
+    private Ui ui;
+    public static boolean isExit = false;
 
-    public static void main(String[] args) throws EmptyTodoException, IncorrectInputException, Exception {
-        String logo = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
-        System.out.println("Hello from\n" + logo);
-
-        System.out.print(border + " Hello! I'm Duke\n" + " What can I do for you?\n" + border);
-        String command;
-        String temp;
-        String[] processInput = new String[2];
-        String tag = "[ ]";
-
-    }
-        while (true) {
+    public Duke() {
+        ui = new Ui();
+        storage = new Storage();
         try {
-            Scanner read = new Scanner(System.in);
-            command = read.nextLine();
-            if (command.equals("bye")) {
-                break;
-            } else if (command.equals("list")) {
-                if (size == 0) {
-                    System.out.print(border + "Empty\n" + border);
-                } else {
-                    printList();
-                }
-                continue;
-            } else if (command.contains("done")) {
-                processInput = command.split(" ", 2);
-                temp = list.get(Integer.valueOf(processInput[1]) - 1).replace('✗', '✓');
-                list.set(Integer.valueOf(processInput[1]) - 1, temp);
-                System.out.print(border + " Nice! I've marked this task as done:\n");
-                System.out.println("  " + list.get(Integer.valueOf(processInput[1]) - 1));
-                System.out.print(border);
-                continue;
-            } else if (command.contains("delete")) {
-                processInput = command.split(" ", 2);
-                delete(Integer.valueOf(processInput[1]) - 1);
-            } else {
-                if (command.contains("todo")) {
-                    if (command.equals("todo")){
-                        throw new EmptyTodoException();
-                    }
-                    tag = "[T]";
-                    command = command.replaceAll("todo ", "");
-                    list.add(tag + "[✗] " + command);
-                } else if (command.contains("deadline")) {
-                    tag = "[D]";
-                    command = command.replaceAll("deadline ", "");
-                    processInput = command.split(" /by", 2);
-                    list.add(tag + "[✗] " + processInput[0] + " (by:" + processInput[1] + ")");
-                } else if (command.contains("event ")) {
-                    tag = "[E]";
-                    command = command.replaceAll("event ", "");
-                    processInput = command.split(" /at", 2);
-                    list.add(tag + "[✗] " + processInput[0] + " (at:" + processInput[1] + ")");
-                } else {
-                    throw new IncorrectInputException();
-                }
-                System.out.println(border + " Got it. I've added this task:\n  " + list.get(size));
-                size++;
-                System.out.println(" Now you have " + Integer.toString(size) + " tasks in the list.\n" + border);
-            }
-        } catch (EmptyTodoException e) {
-            System.out.print(border);
-            System.out.println("☹ OOPS!!! The description of a todo cannot be empty.");
-            System.out.print(border);
-        } catch (IncorrectInputException e) {
-            System.out.print(border);
-            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
-            System.out.print(border);
+            tasks = new TaskList(storage.loadFile());
+        } catch (DukeException e) {
+            ui.displayError(e.getMessage());
+            tasks = new TaskList();
         }
     }
-        System.out.print(border + " Bye. Hope to see you again soon!\n" + border);
 
+    public void run(){
+        ui.displayWelcome();
+
+        while (!isExit) {
+            try {
+                String fullCommand = ui.readCommand();
+                System.out.println(ui.drawLine());
+                Parser.parse(fullCommand,tasks, ui, storage);
+            } catch (DukeException e) {
+                ui.displayError(e.getMessage());
+            } finally{
+                System.out.println(ui.drawLine());
+            }
+        }
+        ui.displayExit();
+    }
+
+    public static void main(String[] args) {
+        Duke duke = new Duke();
+        duke.run();
+    }
 }
