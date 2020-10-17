@@ -81,3 +81,8 @@ Indicate the `<String>` which is the keyword to be searched in the task list.
 Examples:
 * `find book`  
 Searches the task list for any task description containing the keyword `book` and prints the task(s) out.
+
+### Exiting the program : `bye`
+
+Exits the program and saves the task list to a local storage text file.  
+Format: `bye`
